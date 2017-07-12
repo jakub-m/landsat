@@ -1,4 +1,4 @@
-package imaginery
+package imagery
 
 import (
 	"encoding/json"
@@ -8,7 +8,7 @@ import (
 
 type ID string
 
-// Response is a response from NASA Imaginery API.
+// Response is a response from NASA Imagery API.
 type Response struct {
 	CloudScore float32
 	Date       time.Time

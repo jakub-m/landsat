@@ -1,7 +1,7 @@
-package imaginery_test
+package imagery_test
 
 import (
-	"landsat/nasaapi/imaginery"
+	"landsat/nasaapi/imagery"
 	"net/url"
 	"testing"
 	"time"
@@ -16,7 +16,7 @@ func TestUnmarshallResponse(t *testing.T) {
         "url": "http://localhost"
     }
     `
-	r, err := imaginery.UnmarshallResponse([]byte(raw))
+	r, err := imagery.UnmarshallResponse([]byte(raw))
 	if err != nil {
 		t.Fatal(err)
 	}

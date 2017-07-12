@@ -3,7 +3,7 @@ package landsat
 import (
 	"fmt"
 	"io/ioutil"
-	"landsat/nasaapi/imaginery"
+	"landsat/nasaapi/imagery"
 	"log"
 	"net/http"
 	"net/url"
@@ -23,16 +23,8 @@ func GenerateScanChan() chan scanRequest {
 
 	go func() {
 		scanChan <- scanRequest{
-			lat: 52.711111,
-			lon: 23.866667,
-		}
-		scanChan <- scanRequest{
-			lat: 52.711111 + 0.025,
-			lon: 23.866667,
-		}
-		scanChan <- scanRequest{
-			lat: 52.711111,
-			lon: 23.866667 + 0.025,
+			lat: 54.401325,
+			lon: 18.572122,
 		}
 		close(scanChan)
 	}()
@@ -44,17 +36,17 @@ func ProcessScan(in <-chan scanRequest) {
 	i := 0
 	for req := range in {
 		i++
-		imaginery, err := getImaginery(req)
+		imagery, err := getImagery(req)
 		if err != nil {
 			log.Println(err)
 			continue
 		}
-		log.Println(imaginery)
-		fetchImage(imaginery.URL, fmt.Sprintf("image_%d.png", i))
+		log.Println(imagery)
+		fetchImage(imagery.URL, fmt.Sprintf("image_%d.png", i))
 	}
 }
 
-func getImaginery(req scanRequest) (*imaginery.Response, error) {
+func getImagery(req scanRequest) (*imagery.Response, error) {
 	urlString := fmt.Sprintf("https://api.nasa.gov/planetary/earth/imagery?lat=%f&lon=%f&date=2017-04-05&cloud_score=True&api_key=%s", req.lat, req.lon, apiKey)
 	log.Println(urlString)
 	url, err := url.Parse(urlString)
@@ -65,7 +57,7 @@ func getImaginery(req scanRequest) (*imaginery.Response, error) {
 	if err != nil {
 		return nil, err
 	}
-	response, err := imaginery.UnmarshallResponse(body)
+	response, err := imagery.UnmarshallResponse(body)
 	if err != nil {
 		return nil, err
 	}
