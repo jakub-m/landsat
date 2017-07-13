@@ -2,18 +2,26 @@ package imagery
 
 import (
 	"encoding/json"
+	"landsat/nasaapi/types"
 	"net/url"
 	"time"
 )
-
-type ID string
 
 // Response is a response from NASA Imagery API.
 type Response struct {
 	CloudScore float32
 	Date       time.Time
 	URL        *url.URL
-	ID         ID
+	ID         types.ID
+}
+
+func UnmarshallResponse(data []byte) (*Response, error) {
+	var response Response
+	err := json.Unmarshal(data, &response)
+	if err != nil {
+		return nil, err
+	}
+	return &response, nil
 }
 
 func (i *Response) UnmarshalJSON(data []byte) error {
@@ -40,13 +48,4 @@ func (i *Response) UnmarshalJSON(data []byte) error {
 	}
 	i.ID = tmp.ID
 	return nil
-}
-
-func UnmarshallResponse(data []byte) (*Response, error) {
-	var response Response
-	err := json.Unmarshal(data, &response)
-	if err != nil {
-		return nil, err
-	}
-	return &response, nil
 }
