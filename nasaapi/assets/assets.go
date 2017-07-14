@@ -2,9 +2,21 @@ package assets
 
 import (
 	"encoding/json"
+	"fmt"
+	"landsat/http"
 	"landsat/nasaapi/types"
+	l_time "landsat/time"
+	"net/url"
 	"time"
 )
+
+type Request struct {
+	Lat    float32
+	Lon    float32
+	Begin  time.Time
+	End    time.Time
+	APIKey types.APIKey
+}
 
 type Response struct {
 	Count   int
@@ -14,6 +26,29 @@ type Response struct {
 type Result struct {
 	Date time.Time
 	ID   types.ID
+}
+
+func Get(req *Request) (*Response, error) {
+	urlValues := url.Values{}
+	urlValues.Add("lat", fmt.Sprintf("%f", req.Lat))
+	urlValues.Add("lon", fmt.Sprintf("%f", req.Lon))
+	urlValues.Add("begin", l_time.FormatDate(req.Begin))
+	urlValues.Add("end", l_time.FormatDate(req.End))
+	urlValues.Add("api_key", fmt.Sprint(req.APIKey))
+
+	url, err := url.Parse("https://api.nasa.gov/planetary/earth/assets?" + urlValues.Encode())
+	if err != nil {
+		return nil, err
+	}
+	body, err := http.GetBody(url)
+	if err != nil {
+		return nil, err
+	}
+	resp, err := UnmarshallResponse(body)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
 }
 
 func UnmarshallResponse(data []byte) (*Response, error) {

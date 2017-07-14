@@ -4,13 +4,12 @@ import (
 	"fmt"
 	"landsat/http"
 	"landsat/nasaapi/imagery"
+	"landsat/time"
 	"log"
-	"time"
 )
 
 const (
-	apiKey   = "2YzaD3F2NoQusPVLco3ETnhbAR9ehVngscQfgUsZ"
-	dateOnly = "2006-01-02"
+	apiKey = "2YzaD3F2NoQusPVLco3ETnhbAR9ehVngscQfgUsZ"
 )
 
 type scanRequest struct {
@@ -40,7 +39,7 @@ func ProcessScan(in <-chan scanRequest) {
 	i := 0
 	for req := range in {
 		i++
-		date, _ := time.Parse(dateOnly, "2016-04-15")
+		date, _ := time.ParseDate("2016-04-15")
 		imagery, err := imagery.Get(&imagery.Request{Lat: req.lat, Lon: req.lon, APIKey: apiKey, Date: date})
 		if err != nil {
 			log.Println(err)
