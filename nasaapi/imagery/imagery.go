@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"jakub-m/landsat/http"
 	"jakub-m/landsat/nasaapi/types"
-	"log"
 	"net/url"
 	"time"
 )
@@ -38,7 +37,6 @@ func Get(req *Request) (*Response, error) {
 	urlValues.Set("date", req.Date.Format("2006-01-02"))
 	urlValues.Set("cloud_score", "True")
 	url, err := url.Parse("https://api.nasa.gov/planetary/earth/imagery?" + urlValues.Encode())
-	log.Println(url)
 	if err != nil {
 		return nil, err
 	}
