@@ -20,6 +20,7 @@ var args struct {
 	end    date
 	lat    float64
 	lon    float64
+	list   bool
 }
 
 type date struct {
@@ -43,12 +44,28 @@ func init() {
 	flag.StringVar(&args.apiKey, "api-key", "", "API key")
 	flag.Float64Var(&args.lat, "lat", 0, "Latitude")
 	flag.Float64Var(&args.lon, "lon", 0, "Longitude")
+	flag.BoolVar(&args.list, "list", false, "List mode if set, otherwise Get mode")
 	flag.Var(&args.begin, "begin", "Begin date")
 	flag.Var(&args.end, "end", "End date")
 	flag.Parse()
+
+	if args.list {
+		log.SetPrefix("list ")
+	} else {
+		log.SetPrefix("get ")
+	}
 }
 
 func main() {
+	if args.list {
+		doList()
+	} else {
+		doGet()
+	}
+}
+
+// List mode. List all the assets.
+func doList() {
 	req := &assets.Request{
 		Lat:    float32(args.lat),
 		Lon:    float32(args.lon),
@@ -57,18 +74,25 @@ func main() {
 		APIKey: types.APIKey(args.apiKey),
 	}
 
+	log.Println("List mode")
+	log.Println("API key:", req.APIKey)
+	log.Println("Latitude:", req.Lat)
+	log.Println("Longitude:", req.Lon)
+	log.Println("Begin date:", req.Begin.String())
+	log.Println("End date:", req.End.String())
+
 	res, err := assets.Get(req)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	log.Println("API key:", args.apiKey)
-	log.Println("Latitude:", args.lat)
-	log.Println("Longitude:", args.lon)
-	log.Println("Begin date:", args.begin.String())
-	log.Println("End date:", args.end.String())
-	log.Printf("Got %d assets: ", res.Count)
+	log.Printf("Got %d assets", res.Count)
 	for _, r := range res.Results {
 		fmt.Printf("%s\t%g\t%g\t%s\n", r.ID, req.Lat, req.Lon, r.Date.Format(timeFormat))
 	}
+}
+
+// Get assets as specified in stdin.
+func doGet() {
+	log.Println("Get mode")
 }
