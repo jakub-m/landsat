@@ -1,7 +1,7 @@
 package assets_test
 
 import (
-	"landsat/nasaapi/assets"
+	"jakub-m/landsat/nasaapi/assets"
 	"testing"
 	"time"
 )

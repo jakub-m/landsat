@@ -3,9 +3,9 @@ package assets
 import (
 	"encoding/json"
 	"fmt"
-	"landsat/http"
-	"landsat/nasaapi/types"
-	l_time "landsat/time"
+	"jakub-m/landsat/http"
+	"jakub-m/landsat/nasaapi/types"
+	l_time "jakub-m/landsat/time"
 	"net/url"
 	"time"
 )

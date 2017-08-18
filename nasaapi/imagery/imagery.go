@@ -3,8 +3,8 @@ package imagery
 import (
 	"encoding/json"
 	"fmt"
-	"landsat/http"
-	"landsat/nasaapi/types"
+	"jakub-m/landsat/http"
+	"jakub-m/landsat/nasaapi/types"
 	"log"
 	"net/url"
 	"time"

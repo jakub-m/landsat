@@ -2,9 +2,9 @@ package landsat
 
 import (
 	"fmt"
-	"landsat/http"
-	"landsat/nasaapi/imagery"
-	"landsat/time"
+	"jakub-m/landsat/http"
+	"jakub-m/landsat/nasaapi/imagery"
+	"jakub-m/landsat/time"
 	"log"
 )
 

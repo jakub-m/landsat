@@ -1,7 +1,7 @@
 package imagery_test
 
 import (
-	"landsat/nasaapi/imagery"
+	"jakub-m/landsat/nasaapi/imagery"
 	"net/url"
 	"testing"
 	"time"
